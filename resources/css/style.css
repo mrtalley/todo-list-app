@@ -14,6 +14,15 @@ body, input, button {
   fill:none;
 }
 
+@keyframes  inFrame{
+  from{
+    background:rgba(255,255,255,0.2);
+  }
+  to{
+    background: #fff;
+  }
+}
+
 header {
   width:100%;
   height:80px;
@@ -28,24 +37,20 @@ header {
   border-bottom-left-radius:10px;
 }
 
-header input {
+header .header-input{
   width:100%;
   height:50px;
-  float:left;
   color:#fff;
   font-size:15px;
   font-weight:400;
   text-indent:18px;
   background:rgba(255,255,255,0.2);
   padding: 0 60px 0 0;
-
   border-radius: 5px 25px 25px 5px;
 
   border:0;
   box-shadow:none;
   outline: none;
-
-
 
   -webkit-appearance: none;
   -moz-appearance: none;

@@ -13,26 +13,25 @@ renderTODO();
 // User clicked on the add button
 // If any text inside field, add that text to the todo list
 document.getElementById('add').addEventListener('click', function() {
-    var value = document.getElementById('item').value;
-    if(value) {
-        addAnItem(value);
+    var elem = document.getElementById('item');
+    if(elem.value) {
+        animateItemToList(elem);
+        document.getElementById('item').value = '';
+        data.todo.push(elem.value);
+        dataObjectUpdated();
     }
 });
 
 document.getElementById('item').addEventListener('keydown', function(e) {
     var value = this.value;
     if(e.code === 'Enter' && value) {
-        addAnItem(value);
+        animateItemToList(this);
+        document.getElementById('item').value = '';
+        data.todo.push(value);
+        dataObjectUpdated();
     }
 });
 
-function addAnItem(value) {
-    addItemToDOM(value);
-    document.getElementById('item').value = '';
-
-    data.todo.push(value);
-    dataObjectUpdated();
-}
 function dataObjectUpdated() {
     localStorage.setItem('todoList', JSON.stringify(data));
 }
@@ -79,20 +78,104 @@ function completeItem() {
 
     if(id === 'todo') {
         data.todo.splice(data.todo.indexOf(value), 1);
+        animateItemToList(item, true);
         data.completed.push(value);
     }
     else {
         data.completed.splice(data.completed.indexOf(value), 1);
+        animateItemToList(item, false);
         data.todo.push(value);
     }
-
-    // Check if item should be added to completed or re-added to todo
-    var target = (id === 'todo') ? document.getElementById('complete'):document.getElementById('todo');
-
     parent.removeChild(item);
-    target.insertBefore(item, target.childNodes[0]);
     dataObjectUpdated();
 }
+
+function animateItemToList(element, completed) {
+    var list = (completed) ? document.getElementById('complete'):document.getElementById('todo');
+    var text = (completed == null) ? element.value: element.innerText;
+    element.style.opacity = 0;
+
+    var item = document.createElement('li');
+    item.innerText = text;
+
+    var buttons = document.createElement('div');
+    buttons.classList.add('buttons');
+
+    var remove = document.createElement('button');
+    remove.classList.add('remove');
+    remove.innerHTML = removeSVG;
+
+    // Add click event for removeing item
+    remove.addEventListener('click', removeItem);
+
+
+    var complete = document.createElement('button');
+    complete.classList.add('complete');
+    complete.innerHTML = completeSVG;
+
+    // Add click evemt for completing item
+    complete.addEventListener('click', completeItem);
+
+    buttons.appendChild(remove);
+    buttons.appendChild(complete);
+    item.appendChild(buttons);
+    item.style.opacity = 0;
+    //list.appendChild(item);
+    list.insertBefore(item, list.childNodes[0]);
+
+    //Animations
+
+    var animation = document.createElement('div');
+
+    var eleStyle = window.getComputedStyle(element);
+    var itemStyle = window.getComputedStyle(item);
+    animation.innerText = text;
+    animation.style.position = 'absolute';
+    animation.style.top =  element.offsetTop + 'px';
+    animation.style.left = element.offsetLeft + 'px';
+    animation.style.width = element.offsetWidth + 'px';
+    animation.style.height = element.offsetHeight+'px';
+    animation.style.lineHeight = itemStyle.lineHeight;
+    animation.style.padding = itemStyle.padding;
+    animation.style.fontWeight = itemStyle.fontWeight;
+    animation.style.fontSize = itemStyle.fontSize;
+    animation.style.color = itemStyle.color;
+    animation.style.backgroundColor = itemStyle.backgroundColor;
+    animation.style.borderRadius = itemStyle.borderRadius;
+    animation.style.zIndex = '99';
+    element.parentNode.appendChild(animation);
+
+    var targetTop = item.getBoundingClientRect().top;
+    var targetLeft = item.getBoundingClientRect().left;
+    var id = setInterval(frame, 2);
+
+    function frame() {
+        if (animation.offsetTop == targetTop &&
+                animation.offsetLeft == targetLeft &&
+                animation.offsetHeight == item.offsetHeight &&
+                animation.offsetWidth == item.offsetWidth){
+            clearInterval(id);
+            animation.parentNode.removeChild(animation);
+            item.style.opacity = 100;
+            element.style.opacity = 100;
+        }
+        else{
+            if(animation.offsetTop != targetTop){
+                animation.style.top  = (animation.offsetTop - targetTop) > 0 ? (animation.offsetTop-1) + 'px': (animation.offsetTop+1) + 'px';
+            }
+            if(animation.offsetLeft != targetLeft){
+                animation.style.left  = (animation.offsetLeft - targetLeft) > 0 ? (animation.offsetLeft-1) + 'px': (animation.offsetLeft+1) + 'px';
+            }
+            if(animation.offsetHeight != item.offsetHeight){
+                animation.style.height  = (animation.offsetHeight - item.offsetHeight) > 0 ? (animation.offsetHeight-1) + 'px': (animation.offsetHeight+1) + 'px';
+            }
+            if(animation.offsetWidth != item.offsetWidth){
+                animation.style.width  = (animation.offsetWidth - item.offsetWidth) > 0 ? (animation.offsetWidth-1) + 'px': (animation.offsetWidth+1) + 'px';
+            }
+        }
+    }
+}
+
 
 // Adds a new item to the todo list
 function addItemToDOM(text, completed) {
