@@ -11,8 +11,8 @@ init();
 
 function add(event){
     var elem = document.getElementById('item');
-    if (event.key){
-        if(event.key == 'Enter' && elem.value){
+    if (event.keyCode){
+        if(event.keyCode == 13 && elem.value){
             addElementToList(elem);
             document.getElementById('item').value = '';
             data.todo.push(elem.value);
