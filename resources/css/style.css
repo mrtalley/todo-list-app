@@ -10,17 +10,12 @@ body, input, button {
   font-family: 'Roboto', sans-serif;
 }
 
-.noFoll {
-  fill:none;
+h1,h2,h3,h4,h5 {
+  font-family: 'Roboto', sans-serif;
 }
 
-@keyframes  inFrame{
-  from{
-    background:rgba(255,255,255,0.2);
-  }
-  to{
-    background: #fff;
-  }
+.noFoll {
+  fill:none;
 }
 
 header {
@@ -103,7 +98,6 @@ header button svg .fill {
 
 .container {
   width:100%;
-  float:left;
   padding:15px;
 }
 
@@ -247,11 +241,15 @@ ul.todo#complete:before {
 
 ul.todo#todo:empty:after {
   content: 'You have nothing to-do!';
-  margin:15px 0 0 0;
+  height: 50px;
+  line-height: 20px;
 }
 
 ul.todo#complete:empty:after {
   content: 'You have yet to complete any tasks.';
+  height: 50px;
+  margin:auto;
+  line-height: 20px;
 }
 
 ul.todo#todo:after,
