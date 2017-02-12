@@ -11,8 +11,8 @@ init();
 
 function add(event){
     var elem = document.getElementById('item');
-    if (event){
-        if(event.code == 'Enter' && elem.value){
+    if (event.key){
+        if(event.key == 'Enter' && elem.value){
             addElementToList(elem);
             document.getElementById('item').value = '';
             data.todo.push(elem.value);
