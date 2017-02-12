@@ -14,16 +14,16 @@ function add(event){
     if (event.keyCode){
         if(event.keyCode == 13 && elem.value){
             addElementToList(elem);
-            document.getElementById('item').value = '';
             data.todo.push(elem.value);
+            document.getElementById('item').value = '';
             dataObjectUpdated();
         }
     }
     else{
         if(elem.value) {
             addElementToList(elem);
-            document.getElementById('item').value = '';
             data.todo.push(elem.value);
+            document.getElementById('item').value = '';
             dataObjectUpdated();
         }
     }
@@ -100,9 +100,17 @@ function removeItem() {
     }
 
     dataObjectUpdated();
+    var op = 1;
+    var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+                    parent.removeChild(item);
 
-    parent.removeChild(item);
-    document.getElementById('');
+        }
+        item.style.opacity = op;
+        item.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+    }, 30);
 }
 
 function completeItem() {
