@@ -8,7 +8,7 @@ var removeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xli
 
 init();
 
-
+// adds item to list when executed
 function add(event){
     var elem = document.getElementById('item');
     if (event.keyCode){
@@ -29,6 +29,7 @@ function add(event){
     }
 }
 
+// gets position to be used with animations 
 function getPosition(el) {
     var xPos = 0;
     var yPos = 0;
@@ -64,10 +65,13 @@ function updatePosition() {
     // is resized or scrolled
 }
 
+// saves to local storage when called
 function dataObjectUpdated() {
     localStorage.setItem('todoList', JSON.stringify(data));
 }
 
+// initializes the list, checks if there are elements saved that
+// it should load
 function init() {
     document.getElementById('add').addEventListener('click', add);
     document.getElementById('item').addEventListener('keyup', add);
@@ -86,6 +90,7 @@ function init() {
 
 }
 
+// deletes item when called
 function removeItem() {
     var item = this.parentNode.parentNode;
     var parent = item.parentNode;
@@ -113,6 +118,7 @@ function removeItem() {
     }, 30);
 }
 
+// toggle complete / incomplete
 function completeItem() {
     var item = this.parentNode.parentNode;
     var parent = item.parentNode;
@@ -173,6 +179,7 @@ function addTextToList(text, completed) {
     return item;
 }
 
+// controls the add, complete, and delete animations
 function animateItem(to, from) {
     if(to && from){
         to.style.opacity = 0;
